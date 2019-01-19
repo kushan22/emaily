@@ -23,23 +23,18 @@ passport.use(new GoogleStrategy({
     proxy: true
 },
 
-(accessToken,refreshToken,profile,done) => {
+async (accessToken,refreshToken,profile,done) => {
 
-    User.findOne({ googleId: profile.id })
-        .then((existingUser) => {
-            if (existingUser){
-                // We already have a record    
-                console.log("User Exists");
-                done(null,existingUser);
-            }else{
-                new User({ googleId: profile.id }).save()
-                    .then((user) => {
-                        done(null,user);
-                    });
-            }
-        })
+    const existingUser  = await User.findOne({googleId: profile.id});
+    if (existingUser){
+        // We already have a record
+        console.log("User Exists");
+        return done(null,existingUser);
+    }
+        const user = await new User({googleId: profile.id}).save();
+        done(null,user);
+}
 
-    
-})
+)
 
 );  // the strategy to use we have to provide client id and client secret
