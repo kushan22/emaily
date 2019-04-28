@@ -5,7 +5,8 @@ const passport = require('passport');
 const keys = require('./config/keys');
 const bodyParser = require('body-parser');
 
-require('./models/user');
+require('./models/User');
+require('./models/Survey');
 require('./services/passport');
 
 
@@ -27,6 +28,7 @@ app.use(passport.session());
 
 require('./routes/authRoutes')(app);
 require('./routes/billingRoutes')(app);
+require('./routes/surveyRoutes')(app);
 
 if (process.env.NODE_ENV === 'production'){
     // Express serves up production asset like main.js / main.css files from client
@@ -36,7 +38,7 @@ if (process.env.NODE_ENV === 'production'){
     app.get('*',(req,res) => {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
     });
-    
+     
 }
 
 
